@@ -88,7 +88,6 @@ public class Robot extends TimedRobot {
     private WPI_TalonSRX leftTalon2 = new WPI_TalonSRX(1);
 
 
-
     // Default to false, only set true if /victor is found.
     boolean victorUse = false;
     File victorFile = new File("/victor");
@@ -112,17 +111,19 @@ public class Robot extends TimedRobot {
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
 
+        Logger.Initialize();
+
         // /victor exists, so we know to utilize VictorSPs
         if (victorFile.exists()) {
             victorUse = true;
             drive = new DifferentialDrive(rightVictor, leftVictor);
-            //log.SendLog("Using VictorSP as Speed Controller");
+            Logger.SendLog("Using VictorSP as Speed Controller");
         } else {
             drive = new DifferentialDrive(rightTalon, leftTalon);
             drive2 = new DifferentialDrive(rightTalon2, leftTalon2);
             leftTalon.setNeutralMode(NeutralMode.Coast);
             rightTalon.setNeutralMode(NeutralMode.Coast);
-            //log.SendLog("Using TalonSRX as Speed Controller");
+            Logger.SendLog("Using TalonSRX as Speed Controller");
         }
     }
 

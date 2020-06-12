@@ -40,7 +40,7 @@ public class Logger {
     private static FileWriter Log;
     private static boolean VerboseMode;
 
-    public static void main() throws IOException {
+    public static void Initialize() throws IOException {
         // Input variable
         Scanner conInput = new Scanner(System.in);
 
@@ -85,7 +85,7 @@ public class Logger {
         LocalDateTime CurrentTime = LocalDateTime.now();
         
         // Create new log file
-        Log = new FileWriter("C:/Users/bioni/Desktop/Logs/log-" + dtf.format(CurrentTime) + ".txt");
+        Log = new FileWriter("log-" + dtf.format(CurrentTime) + ".txt");
     }
 
     // Check status of our backlogs, print if not empty
