@@ -56,6 +56,6 @@ public class Time {
     // Ex.
     // Time.IterDelay(1000, 0);
     public static void IterDelay(int ms, int id) {
-        Delay_Time.set(id, CPUTime.millis() + ms);
+        Delay_Time.set(id, (int)CPUTime.millis() + ms);
     }
 }
