@@ -1,0 +1,7 @@
+sudo: true
+language: java
+before_install: chmod +x gradlew
+install: true
+script: ./gradlew build
+#after_success: 
+jdk: openjdk11
