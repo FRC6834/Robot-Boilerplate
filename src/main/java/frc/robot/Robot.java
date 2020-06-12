@@ -7,24 +7,6 @@
 
 package frc.robot;
 
-/*
-WIP
-Xinput Button 'Docs':
-
-RAW BUTTONS:
-1 - A
-2 - B
-3 - X
-4 - Y
-5 - Left Bumper
-6 - Right Bumper
-7 - Select
-8 - Start
-9 - Left Stick (DOWN)
-10 - Left Stick (DOWN)
-- IB
-*/
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -61,18 +43,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import edu.wpi.first.networktables.*;
 
-// Color Sensor imports
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.util.Color;
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorMatch;
-import com.revrobotics.CANError;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.Compressor;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -87,12 +57,7 @@ public class Robot extends TimedRobot {
     private String m_autoSelected;
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-    // The amount of iterations full-throttle until we have reached 5ft
-    private final int TICKS_PER_FIVE_FEET = 4246;
-
     // Joystick Initialization
-    // FIXME - Actions such as getButton and getAxis are DEPRECATED
-    // and will soon be removed! - IB
     private InputHelper Controller;
     private final Joystick DriverOne = new Joystick(0);
     private final Joystick DriverTwo = new Joystick(1);
@@ -136,75 +101,6 @@ public class Robot extends TimedRobot {
     // Gyro (Talons only!)
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
-    // Wench Initialization
-    private CANSparkMax rightWench = new CANSparkMax(4, MotorType.kBrushless);
-    private CANSparkMax leftWench = new CANSparkMax(5, MotorType.kBrushless);
-    // IB - change to neos
-    //private TalonFX rightWench = new TalonFX(4);
-    //private TalonFX leftWench = new TalonFX(5);
-
-    // Pneumatics Initialization
-    private final Compressor comp = new Compressor(0);
-    private final Solenoid BucketSolenoid = new Solenoid(4);
-    private final Solenoid WheelSolenoid = new Solenoid(5);
-    private final Solenoid LipSolenoid = new Solenoid(6);
-    boolean WheelOn;
-    int WheelTicker;
-
-    // Lift Initialization
-    private final PWMSparkMax LiftPWM = new PWMSparkMax(2);
-
-    // SPARK
-    private Spark SparkWheel = new Spark(1);
-
-    /*
-        ============
-        COLOR SENSOR
-        ============
-
-        Big heap of variables for managing the color sensor, modes,
-        and color RGB targets.
-
-        - IB
-    */
-    // General
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
-    private final ColorSensorV3 rainbowDetector = new ColorSensorV3(i2cPort);
-    private final ColorMatch m_colorMatcher = new ColorMatch();
-    private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-    private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-    private final Color kRedTarget = ColorMatch.makeColor(0.531, 0.372, 0.114);
-    private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
-    private boolean ColorSensorIsConfident;
-    
-    /*
-        0: RED
-        1: GREEN
-        2: BLUE
-        3: YELLOW
-
-        - IB
-    */
-    private int colorMendable; 
-    private int lastColorMendable;
-
-    // Color Spinner
-    private boolean isAutoSpinning;
-    private int AutoSpinColor;
-
-    // Revolution Spinner
-    private boolean isRevolving;
-    private int colorCycles;
-    private int WHEEL_REVOLUTIONS_BEFORE_STOP = 3; // WHEEL_REVOLUTIONS_BEFORE_STOP * 8
-/*Testing issue w/ cam - EG
-    //Camera
-    // Creates UsbCamera and MjpegServer [1] and connects them
-    UsbCamera werk = CameraServer.getInstance().startAutomaticCapture();
-
-    // Creates the CvSink and connects it to the UsbCamera
-    CvSink cvSink = CameraServer.getInstance().getVideo();
-*/
-
   
     /**
      * This function is run when the robot is first started up and should be
@@ -228,14 +124,6 @@ public class Robot extends TimedRobot {
             rightTalon.setNeutralMode(NeutralMode.Coast);
             //log.SendLog("Using TalonSRX as Speed Controller");
         }
-
-        // Add Color Targets to the Matcher
-        m_colorMatcher.addColorMatch(kBlueTarget);
-        m_colorMatcher.addColorMatch(kGreenTarget);
-        m_colorMatcher.addColorMatch(kRedTarget);
-        m_colorMatcher.addColorMatch(kYellowTarget);
-        //compressor because FRC is redundant and stupid
-        comp.start();
     }
 
     /**
@@ -248,8 +136,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        // FIXME - Potentially move color sensor stuff here - IB
-        // best
         //robot.WinMatch();
     }
 
@@ -293,20 +179,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         // Victors cannot utilize autonomous -IB
-        /*if (victorUse)
+        if (victorUse)
             return;
-
-        int distance = (TICKS_PER_FIVE_FEET/5) * 13;*/
-
-        // Use a janky tick-based timer to use autonomous in a horrible but functional
-        // way - IB
-
-        if(autoTick < 100) {
-            drive.arcadeDrive(.5,0);
-            drive2.arcadeDrive(.5,0);
-            autoTick++;
-        }
-
     }
 
     /**
@@ -314,14 +188,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        SparkWheel.set(0);
-
-        if (isRevolving || isAutoSpinning)
-            SparkWheel.set(1);
-
-        if (DriverTwo.getRawButton(Controller.BUTTON_B) && !isRevolving && !isAutoSpinning)
-            SparkWheel.set(1);
-    
         //Drive
         if (DriverOne.getRawAxis(Controller.TRIGGER_RIGHT) > 0) {
             drive.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_RIGHT), DriverOne.getRawAxis(Controller.ANALOG_LEFT), false);
@@ -330,59 +196,6 @@ public class Robot extends TimedRobot {
             drive.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_LEFT)*-1, DriverOne.getRawAxis(Controller.ANALOG_LEFT)*-1, false);
             drive2.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_LEFT)*-1, DriverOne.getRawAxis(Controller.ANALOG_LEFT)*-1, false);
         }
-
-        if (DriverOne.getRawButton(Controller.BUMPER_LEFT)){
-            BucketSolenoid.set(true);
-        } else {
-            BucketSolenoid.set(false);
-        }
-
-        if (DriverOne.getRawButton(Controller.BUMPER_RIGHT)) {
-            LipSolenoid.set(true);
-        } else {
-            LipSolenoid.set(false);
-        }
-
-        //Tick based timer for wheel toggle
-        if(DriverTwo.getRawButton(Controller.BUTTON_A)) {
-            WheelTicker++;
-        } else {
-            WheelTicker = 0;
-        }
-
-        //wheel pneumatics
-        if (WheelTicker == 5 && !WheelOn) {
-            WheelOn = true;
-        } else if (WheelTicker == 5) {
-            WheelOn = false;
-        }
-
-        WheelSolenoid.set(WheelOn);
-
-        //SCANDALOUS WENCH
-        if (DriverTwo.getRawAxis(Controller.TRIGGER_RIGHT) > 0){
-            SmartDashboard.putString("trigger right","true");
- 
-            rightWench.set(0.5);
-            leftWench.set(0.5);
-            //rightWench.set(ControlMode.PercentOutput, 0.2);
-            //leftWench.set(ControlMode.PercentOutput, 0.2);
-        }
-        else if(DriverTwo.getRawAxis(Controller.TRIGGER_LEFT) > 0){
-            rightWench.set(-0.5);
-            leftWench.set(-0.5);
-            SmartDashboard.putString("trigger left","true");
-            //rightWench.set(ControlMode.PercentOutput, -0.2);
-            //leftWench.set(ControlMode.PercentOutput, -0.2);
-        }else{
-            SmartDashboard.putString("trigger default","true");
-            rightWench.set(0);
-            leftWench.set(0);
-            //rightWench.set(ControlMode.PercentOutput, 0);
-            //leftWench.set(ControlMode.PercentOutput, 0);
-        }
-
-        LiftPWM.setSpeed(0);
 
         int POV = DriverOne.getPOV();
         int POV2 = DriverTwo.getPOV();
@@ -414,127 +227,12 @@ public class Robot extends TimedRobot {
                 drive2.arcadeDrive(0, -0.5);
                 break;
         }
-        if(DriverTwo.getRawButton(Controller.BUMPER_RIGHT)){
+
+        if(DriverTwo.getRawButton(Controller.BUMPER_RIGHT)) {
             LiftPWM.setSpeed(0.5);
-        }else if(DriverTwo.getRawButton(Controller.BUMPER_LEFT)){
+        } else if(DriverTwo.getRawButton(Controller.BUMPER_LEFT)) {
             LiftPWM.setSpeed(-0.5);
         }
-        //old lift 
-        /*switch(POV2) {
-            case 90:
-                LiftPWM.setSpeed(0.5);
-                break;
-            case 270:
-                LiftPWM.setSpeed(-0.5);
-                break;
-        }*/
-        /*Removing color sensor code - EG
-        //Color
-        Color detectedColor = rainbowDetector.getColor();
-        String colorString;
-        ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-
-        if (match.color == kBlueTarget) {
-            colorString = "Blue";
-            colorMendable = 2;
-        } else if (match.color == kRedTarget) {
-            colorString = "Red";
-            colorMendable = 0;
-        } else if (match.color == kGreenTarget) {
-            colorString = "Green";
-            colorMendable = 1;
-        } else if (match.color == kYellowTarget) {
-            colorString = "Yellow";
-            colorMendable = 3;
-        } else {
-            colorString = "Unknown";
-        }
-
-        if (colorString != "Unknown") {
-            if (match.confidence < 0.88) {
-                colorString += " (NOT CONFIDENT)";
-
-                // set back if we weren't confident
-                colorMendable = lastColorMendable;
-                ColorSensorIsConfident = false;
-            } else {
-                ColorSensorIsConfident = true;
-            }
-        }
-
-        // On Color Change
-        if (colorMendable != lastColorMendable && ColorSensorIsConfident) {
-            // Check Regarding Color Location
-            if (isAutoSpinning) {
-                if (colorMendable == AutoSpinColor)
-                    isAutoSpinning = false;
-            } else if (isRevolving) {
-                colorCycles++;
-
-                if (colorCycles >= WHEEL_REVOLUTIONS_BEFORE_STOP * 8) {
-                    colorCycles = 0;
-                    isRevolving = false;
-                }
-            }
-        }
-
-        if (colorMendable != lastColorMendable && isAutoSpinning && ColorSensorIsConfident) {
-
-            if (colorMendable == AutoSpinColor) {
-                isAutoSpinning = false;
-            }
-        }
-
-        lastColorMendable = colorMendable;
-
-        SmartDashboard.putNumber("Red", detectedColor.red);
-        SmartDashboard.putNumber("Green", detectedColor.green);
-        SmartDashboard.putNumber("Blue", detectedColor.blue);
-        SmartDashboard.putNumber("Confidence", match.confidence);
-        SmartDashboard.putString("Detected Color", colorString);
-        SmartDashboard.putNumber("Color Cycles", colorCycles);
-
-        if (!isAutoSpinning)
-            SmartDashboard.putString("Target Color", "Waiting");
-
-        if (!isRevolving)
-            SmartDashboard.putString("Revolving", "Non-Factual");
-
-
-        // Color Automation.. Thing -IB
-        if (!isRevolving) {
-            if (DriverTwo.getRawButton(Controller.BUTTON_A) && !isAutoSpinning) {
-                SmartDashboard.putString("Target Color", "Green");
-                AutoSpinColor = 1;
-                isAutoSpinning = true;
-            } else if (DriverTwo.getRawButton(Controller.BUTTON_B) && !isAutoSpinning) {
-                SmartDashboard.putString("Target Color", "Red");
-                AutoSpinColor = 0;
-                isAutoSpinning = true;
-            } else if (DriverTwo.getRawButton(Controller.BUTTON_X) && !isAutoSpinning) {
-                SmartDashboard.putString("Target Color", "Blue");
-                AutoSpinColor = 2;
-                isAutoSpinning = true;
-            } else if (DriverTwo.getRawButton(Controller.BUTTON_Y) && !isAutoSpinning) {
-                SmartDashboard.putString("Target Color", "Yellow");
-                AutoSpinColor = 3;
-                isAutoSpinning = true;
-            }
-        }
-
-        // Revolve X times
-        if (!isAutoSpinning) {
-            if (DriverTwo.getRawButton(Controller.BUTTON_LS) && !isRevolving) {
-                isRevolving = true;
-                SmartDashboard.putString("Revolving", "Factual");
-            }
-        }
-
-        //failsafe
-        if (DriverTwo.getRawButton(Controller.BUTTON_RS)) {
-            isAutoSpinning = isRevolving = false;
-        }
-    */
     }
 
     /**
