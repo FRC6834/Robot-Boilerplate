@@ -228,12 +228,6 @@ public class Robot extends TimedRobot {
                 drive2.arcadeDrive(0, -0.5);
                 break;
         }
-
-        if(DriverTwo.getRawButton(Controller.BUMPER_RIGHT)) {
-            LiftPWM.setSpeed(0.5);
-        } else if(DriverTwo.getRawButton(Controller.BUMPER_LEFT)) {
-            LiftPWM.setSpeed(-0.5);
-        }
     }
 
     /**

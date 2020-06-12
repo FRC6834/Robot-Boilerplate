@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class Time {
     // Definitions
-    private static ArrayList<Int> Delay_Time; // Storage for the CPU-Time, in milliseconds, when IterReady will be true.
+    private static ArrayList<Integer> Delay_Time = new ArrayList<>(); // Storage for the CPU-Time, in milliseconds, when IterReady will be true.
     private static Clock CPUTime = Clock.systemDefaultZone(); // Will be used to obtain the current time, in milliseconds.
     // END Definitions
 
@@ -30,7 +30,7 @@ public class Time {
     // if (Time.IterReady(0)) { Robot.DoCoolStuff(); }
     public static boolean IterReady(int id) {
         // First, check if Delay_Time at index of id is actually valid
-        if (Delay_Time.get(id) == NULL) {
+        if (Delay_Time.get(id) == null) {
             // Alert that an invalid id was used
             // This is actually recoverable (technically), however we want
             // this to be addressed ASAP, so we'll ERR and Quit.
