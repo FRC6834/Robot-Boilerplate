@@ -111,7 +111,11 @@ public class Robot extends TimedRobot {
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
 
-        Logger.Initialize();
+        try {
+            Logger.Initialize();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
 
         // /victor exists, so we know to utilize VictorSPs
         if (victorFile.exists()) {
