@@ -111,7 +111,11 @@ public class Robot extends TimedRobot {
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
 
-        Logger.Initialize();
+        try {
+            Logger.Initialize();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
 
         // /victor exists, so we know to utilize VictorSPs
         if (victorFile.exists()) {
@@ -227,12 +231,6 @@ public class Robot extends TimedRobot {
                 drive.arcadeDrive(0, -0.5);
                 drive2.arcadeDrive(0, -0.5);
                 break;
-        }
-
-        if(DriverTwo.getRawButton(Controller.BUMPER_RIGHT)) {
-            LiftPWM.setSpeed(0.5);
-        } else if(DriverTwo.getRawButton(Controller.BUMPER_LEFT)) {
-            LiftPWM.setSpeed(-0.5);
         }
     }
 

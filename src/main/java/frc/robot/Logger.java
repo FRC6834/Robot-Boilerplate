@@ -40,7 +40,7 @@ public class Logger {
     private static FileWriter Log;
     private static boolean VerboseMode;
 
-    public static void Initialize() throws IOException {
+    public static void Initialize() throws java.io.IOException {
         // Input variable
         Scanner conInput = new Scanner(System.in);
 
@@ -90,7 +90,7 @@ public class Logger {
 
     // Check status of our backlogs, print if not empty
     // - IB
-    public static void ParseBacklogs() throws IOException {
+    public static void ParseBacklogs() throws java.io.IOException {
         // We used to do forEach's here, but there's no easy way to do index retrieval
         // (for removal after print)
         for (int i = 0; i < ErrorBacklogVector.size(); i++) {
