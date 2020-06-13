@@ -17,35 +17,29 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 
 public class InputHelper {
-    /*
-        Static integers for button or axis names, as remembering
-        numbers can be a major pain. Layout/Names are based on
-        Generic xinput (Xbox)'s scheme, as that's what WPILIB
-        natively supports.
+    // Button Definitions
+    // Use enums here instead of int spam because it's cleaner and faster - IB (6/13/20)
+    public static enum XInput {
+        Null,
+        // Face Buttons
+        ButtonA,
+        ButtonB,
+        ButtonX,
+        ButtonY,
+        // Bumpers and Triggers
+        BumperLeft,
+        BumperRight,
+        TriggerLeft,
+        TriggerRight,
+        // Analog Sticks
+        AnalogLeft,
+        AnalogRight,
+        // Misc.
+        ButtonSelect,
+        ButtonStart,
+        ButtonLS,
+        ButtonRS
+    }
 
-        - IB
-    */
-    // Face Buttons
-    public static int BUTTON_A = 1;
-    public static int BUTTON_B = 2;
-    public static int BUTTON_X = 3;
-    public static int BUTTON_Y = 4;
-
-    // Bumpers and Triggers
-    public static int BUMPER_LEFT = 5;
-    public static int BUMPER_RIGHT = 6;
-    public static int TRIGGER_LEFT = 2;
-    public static int TRIGGER_RIGHT = 3;
-
-    // Analog Sticks
-    public static int ANALOG_LEFT = 0;
-    public static int ANALOG_RIGHT = 1;
-
-    // Misc.
-    public static int BUTTON_SELECT = 7;
-    public static int BUTTON_START = 8;
-    public static int BUTTON_LS = 9;
-    public static int BUTTON_RS = 10;
-
-    // TODO - Potentially have things for button being held or single presses?- IB
+    // TODO - Potentially have things for button being held or single presses?
 }
