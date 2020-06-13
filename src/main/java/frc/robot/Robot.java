@@ -58,7 +58,6 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
     // Joystick Initialization
-    private InputHelper Controller;
     private final Joystick DriverOne = new Joystick(0);
     private final Joystick DriverTwo = new Joystick(1);
   
@@ -194,12 +193,12 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         //Drive
-        if (DriverOne.getRawAxis(Controller.TRIGGER_RIGHT) > 0) {
-            drive.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_RIGHT), DriverOne.getRawAxis(Controller.ANALOG_LEFT), false);
-            drive2.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_RIGHT), DriverOne.getRawAxis(Controller.ANALOG_LEFT), false);
-        }else if (DriverOne.getRawAxis(Controller.TRIGGER_LEFT) > 0){
-            drive.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_LEFT)*-1, DriverOne.getRawAxis(Controller.ANALOG_LEFT)*-1, false);
-            drive2.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_LEFT)*-1, DriverOne.getRawAxis(Controller.ANALOG_LEFT)*-1, false);
+        if (DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()) > 0) {
+            drive.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()), DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal()), false);
+            drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()), DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal()), false);
+        } else if (DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal()) > 0) {
+            drive.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal())*-1, DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal())*-1, false);
+            drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal())*-1, DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal())*-1, false);
         }
 
         int POV = DriverOne.getPOV();
