@@ -110,23 +110,23 @@ public class Robot extends TimedRobot {
         m_chooser.addOption("My Auto", kCustomAuto);
         SmartDashboard.putData("Auto choices", m_chooser);
 
-        try {
-            Logger.Initialize();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+        //try {
+        //    Logger.Initialize();
+        //} catch(IOException e) {
+        //    e.printStackTrace();
+        //}
 
         // /victor exists, so we know to utilize VictorSPs
         if (victorFile.exists()) {
             victorUse = true;
             drive = new DifferentialDrive(rightVictor, leftVictor);
-            Logger.SendLog("Using VictorSP as Speed Controller");
+            //Logger.SendLog("Using VictorSP as Speed Controller");
         } else {
             drive = new DifferentialDrive(rightTalon, leftTalon);
             drive2 = new DifferentialDrive(rightTalon2, leftTalon2);
             leftTalon.setNeutralMode(NeutralMode.Coast);
             rightTalon.setNeutralMode(NeutralMode.Coast);
-            Logger.SendLog("Using TalonSRX as Speed Controller");
+            //Logger.SendLog("Using TalonSRX as Speed Controller");
         }
     }
 
@@ -195,10 +195,12 @@ public class Robot extends TimedRobot {
         //Drive
         if (DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()) > 0) {
             drive.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()), DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal()), false);
-            drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()), DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal()), false);
+            if (drive2 != null)
+                drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()), DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal()), false);
         } else if (DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal()) > 0) {
             drive.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal())*-1, DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal())*-1, false);
-            drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal())*-1, DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal())*-1, false);
+            if (drive2 != null)
+                drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal())*-1, DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal())*-1, false);
         }
 
         int POV = DriverOne.getPOV();
@@ -216,19 +218,27 @@ public class Robot extends TimedRobot {
         switch (POV) {
             case 0:
                 drive.arcadeDrive(0.5, 0);
-                drive2.arcadeDrive(0.5, 0);
+
+                if (drive2 != null)
+                    drive2.arcadeDrive(0.5, 0);
                 break;
             case 90:
                 drive.arcadeDrive(0, 0.5);
-                drive2.arcadeDrive(0, 0.5);
+
+                if (drive2 != null)
+                    drive2.arcadeDrive(0, 0.5);
                 break;
             case 180:
                 drive.arcadeDrive(-0.5, 0);
-                drive2.arcadeDrive(-0.5, 0);
+
+                if (drive2 != null)
+                    drive2.arcadeDrive(-0.5, 0);
                 break;
             case 270:
                 drive.arcadeDrive(0, -0.5);
-                drive2.arcadeDrive(0, -0.5);
+
+                if (drive2 != null)
+                    drive2.arcadeDrive(0, -0.5);
                 break;
         }
     }
