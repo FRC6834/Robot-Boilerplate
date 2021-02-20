@@ -80,6 +80,8 @@ public class Robot extends TimedRobot {
     // Need to init both Victor and Talons
     private final WPI_VictorSPX leftVictor = new WPI_VictorSPX(1);
     private final WPI_VictorSPX rightVictor = new WPI_VictorSPX(0);
+    private final WPI_VictorSPX rightVictor2 = new WPI_VictorSPX(1);
+    private final WPI_VictorSPX leftVictor2 = new WPI_VictorSPX(2);
 
     private WPI_TalonSRX leftTalon = new WPI_TalonSRX(02);
     private WPI_TalonSRX rightTalon = new WPI_TalonSRX(03);
@@ -98,6 +100,9 @@ public class Robot extends TimedRobot {
 
     // Gyro (Talons only!)
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+    // XInput Helper
+    private InputHelper Controller;
 
   
     /**
@@ -120,6 +125,7 @@ public class Robot extends TimedRobot {
         if (victorFile.exists()) {
             victorUse = true;
             drive = new DifferentialDrive(rightVictor, leftVictor);
+            drive2 = new DifferentialDrive(rightVictor2, leftVictor2);
             //Logger.SendLog("Using VictorSP as Speed Controller");
         } else {
             drive = new DifferentialDrive(rightTalon, leftTalon);
@@ -193,14 +199,12 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         //Drive
-        if (DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()) > 0) {
-            drive.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()), DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal()), false);
-            if (drive2 != null)
-                drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerRight.ordinal()), DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal()), false);
-        } else if (DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal()) > 0) {
-            drive.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal())*-1, DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal())*-1, false);
-            if (drive2 != null)
-                drive2.curvatureDrive(DriverOne.getRawAxis(InputHelper.XInput.TriggerLeft.ordinal())*-1, DriverOne.getRawAxis(InputHelper.XInput.AnalogLeft.ordinal())*-1, false);
+        if (DriverOne.getRawAxis(Controller.TRIGGER_RIGHT) > 0) {
+            drive.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_RIGHT), DriverOne.getRawAxis(Controller.ANALOG_LEFT), false);
+            drive2.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_RIGHT), DriverOne.getRawAxis(Controller.ANALOG_LEFT), false);
+        }else if (DriverOne.getRawAxis(Controller.TRIGGER_LEFT) > 0){
+            drive.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_LEFT)*-1, DriverOne.getRawAxis(Controller.ANALOG_LEFT)*-1, false);
+            drive2.curvatureDrive(DriverOne.getRawAxis(Controller.TRIGGER_LEFT)*-1, DriverOne.getRawAxis(Controller.ANALOG_LEFT)*-1, false);
         }
 
         int POV = DriverOne.getPOV();
